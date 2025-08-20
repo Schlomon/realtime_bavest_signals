@@ -1,0 +1,1 @@
+# Calculating Near-Realtime stock signals using data from bavest.co with Kinesis, Lambda and ElastiCache
