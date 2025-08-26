@@ -39,25 +39,6 @@ The infrastructure consists of:
 - **Purpose**: Stores processed financial data with structured keys
 - **Access**: VPC-only for security
 
-## 📁 Project Structure
-
-```
-realtime_bavest_signals/
-├── __main__.py                    # Main Pulumi infrastructure code
-├── Pulumi.yaml                   # Project configuration
-├── Pulumi.dev.yaml.template     # Configuration template
-├── requirements.txt             # Pulumi dependencies
-├── lambda_functions/           # Lambda function source code
-│   ├── ingestion/             # Bavest API ingestion function
-│   │   ├── handler.py         # Main ingestion logic
-│   │   └── requirements.txt   # boto3, requests dependencies
-│   ├── processing/            # Data processing function  
-│   │   ├── handler.py         # P/E ratio analysis logic
-│   │   └── requirements.txt   # boto3, redis dependencies
-│   └── README.md             # Lambda functions documentation
-└── README.md                  # This file
-```
-
 ## 🚀 Setup
 
 ### Prerequisites
@@ -104,8 +85,6 @@ pulumi preview
 pulumi up
 ```
 
-This will create **18 AWS resources** including Lambda functions, Kinesis stream, Redis cluster, IAM roles, and VPC configurations.
-
 ## 🔧 Environment Variables
 
 ### Ingestion Lambda:
@@ -128,23 +107,6 @@ This will create **18 AWS resources** including Lambda functions, Kinesis stream
    - `bavest:pe_ratio:{symbol}:{timestamp}` - P/E ratio data
    - `bavest:latest:{symbol}` - Latest analysis for each symbol
 
-## 📈 Monitoring
-
-**Key metrics to monitor**:
-- Lambda function errors and duration (CloudWatch)
-- Kinesis stream throughput and iterator age
-- ElastiCache memory usage and connections
-- EventBridge rule execution success rate
-
-**Available outputs after deployment**:
-```bash
-pulumi stack output
-```
-- `ingestion_lambda_name`
-- `processing_lambda_name` 
-- `kinesis_stream_name`
-- `redis_primary_endpoint`
-
 ## ⚡ Testing
 
 **Test ingestion function**:
@@ -157,45 +119,8 @@ aws lambda invoke --function-name $(pulumi stack output ingestion_lambda_name) -
 aws lambda invoke --function-name $(pulumi stack output processing_lambda_name) --payload '{"Records":[{"kinesis":{"data":"base64-encoded-test-data"}}]}' response.json
 ```
 
-## 🔄 Scaling
-
-**To scale the infrastructure**:
-- **Kinesis**: Increase `kinesis:shard_count` in config
-- **Redis**: Change `elasticache:node_type` to larger instance
-- **Lambda**: Adjust `lambda:timeout` and memory settings
-- **Frequency**: Modify `ingestion:schedule` for different intervals
-
-## 💰 Cost Optimization
-
-- **Kinesis**: ~$0.0075/hour per shard + data throughput
-- **Lambda**: Pay per execution (~288 executions/day)
-- **ElastiCache**: ~$0.0058/hour for t3.micro
-- **Data Storage**: 24h Kinesis retention, automatic Redis TTL
-
-**Estimated monthly cost**: $15-25 for development workload
-
-## 🔒 Security
-
-- **IAM**: Least-privilege roles for each service
-- **VPC**: Processing Lambda in VPC for Redis access
-- **Security Groups**: Redis accessible only from Lambda
-- **API Keys**: Environment variables (consider AWS Secrets Manager for production)
-
-## 🧹 Cleanup
-
-**To destroy the infrastructure**:
-```bash
-pulumi destroy
-```
-
-This will remove all 18 AWS resources and stop all charges.
 
 ## 🛠️ Development
-
-**Lambda function dependencies are managed locally**:
-- Dependencies installed in function directories
-- Pulumi uses `FileArchive` for deployment
-- `.gitignore` excludes dependency directories
 
 **For development**:
 ```bash
@@ -203,7 +128,3 @@ This will remove all 18 AWS resources and stop all charges.
 pip install -r lambda_functions/ingestion/requirements.txt -t lambda_functions/ingestion/
 pip install -r lambda_functions/processing/requirements.txt -t lambda_functions/processing/
 ```
-
-## 📋 License
-
-This project is open source. Please ensure you comply with Bavest API terms of service.
