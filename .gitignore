@@ -1,0 +1,51 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+ENV/
+
+# AWS and Pulumi
+.pulumi/
+Pulumi.dev.yaml
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files and temporary data
+*_test.json
+*_response.json
+test_*.json
+response*.json
+
+# Lambda packages and dependencies in lambda directories
+lambda_functions/*/boto3/
+lambda_functions/*/botocore/
+lambda_functions/*/requests/
+lambda_functions/*/redis/
+lambda_functions/*/urllib3/
+lambda_functions/*/dateutil/
+lambda_functions/*/jmespath/
+lambda_functions/*/idna/
+lambda_functions/*/certifi/
+lambda_functions/*/charset_normalizer/
+lambda_functions/*/s3transfer/
+lambda_functions/*/bin/
+lambda_functions/*/*.dist-info/
+lambda_functions/*/six.py
+lambda_functions/*/*.zip
+
+# Deployment artifacts
+*.zip
+package_lambdas.*

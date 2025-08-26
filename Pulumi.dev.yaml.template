@@ -1,0 +1,24 @@
+config:
+  aws:region: eu-central-1
+  
+  # Bavest API Configuration
+  bavest:api_url: "https://api.bavest.co/v0/"
+  bavest:api_key: "YOUR_BAVEST_API_KEY_HERE"
+  
+  # Environment
+  environment: "dev"
+  
+  # Kinesis Configuration
+  kinesis:shard_count: 1
+  kinesis:retention_period: 24
+  
+  # ElastiCache Configuration
+  elasticache:node_type: "cache.t3.micro"
+  elasticache:num_cache_clusters: 1
+  
+  # Lambda Configuration
+  lambda:timeout: 30
+  lambda:processing_timeout: 60
+  
+  # Scheduling
+  ingestion:schedule: "rate(5 minutes)"  # How often to fetch from Bavest API
